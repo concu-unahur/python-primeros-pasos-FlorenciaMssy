@@ -5,38 +5,36 @@ import logging
 logging.basicConfig(format='%(asctime)s.%(msecs)03d [%(threadName)s] - %(message)s', datefmt='%H:%M:%S', level=logging.INFO)
 
 contador = 2
-lock = threading.Lock()
-lock2 = threading.Lock()
+semaforo = threading.Semaphore(1)
 def sumarUno():
     global contador
-    global lock
+    global semaforo
     #time.sleep(1)
 
     try:    
-    #lock2.acquire()
         contador += 1
         logging.info(contador)
     finally:
-        lock.release()
+        semaforo.release()
    
 
 def multiplicarPorDos():
     global contador
-    global lock
+    global semaforo
     #time.sleep(1)
-    lock.acquire()
+    semaforo.acquire()
     try:   
         contador *= 2
         logging.info(contador)
     finally:
-        lock.release()
+        semaforo.release()
         #lock2.release()
 
 
 threadParaMultiplicar = threading.Thread(target=multiplicarPorDos)
 threadParaSumar = threading.Thread(target=sumarUno)
 
-lock.acquire()
+semaforo.acquire()
 
 threadParaMultiplicar.start()
 threadParaSumar.start()
