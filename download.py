@@ -49,3 +49,11 @@ tiempo.imprimir()
 
 
 # Pero ahora con threads
+tiempo.iniciar
+for url in img_urls:
+    url = threading.Thread(target=bajar_imagen, args=[url])
+    url.start()
+
+
+tiempo.finalizar
+tiempo.imprimir
